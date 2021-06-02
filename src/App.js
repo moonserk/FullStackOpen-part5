@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
+import AddForm from './components/AddForm'
 import blogService from './services/blogs'
 import loginService from './services/login'
+
 const App = () => {
 
   const [blogs, setBlogs] = useState([])
@@ -11,11 +13,16 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
 
+  const [author, setAuthor] = useState('')
+  const [title, setTitle] = useState('')
+  const [url, setUrl] = useState('')
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
+    async function fetchData(){
+      const blogs = await blogService.getAll()
       setBlogs( blogs )
-    )  
+    }
+    fetchData()
   }, [])
 
   useEffect(() => {
@@ -23,6 +30,7 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
+      blogService.setToken(user.token)
     }
   }, [])
 
@@ -36,6 +44,7 @@ const App = () => {
 
       window.localStorage.setItem('loggedBlogsappUser', JSON.stringify(user))
 
+      blogService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
@@ -63,13 +72,54 @@ const App = () => {
     window.localStorage.clear()
   }
 
+  const handleAdding = async (event) => {
+    event.preventDefault()
+
+    try {
+      const newBlog = await blogService.create({
+        title, author, url
+      })
+      console.log(newBlog)
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+      setBlogs(blogs.concat(newBlog))
+    }catch(e){
+      setErrorMessage('Wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+
+  }
+
+  const removeHandler = async (id) => {
+    try{
+      const deletedBlog = await blogService.remove(id)
+      console.log(deletedBlog)
+      setBlogs(blogs.filter(blog => blog.id !== id))
+    }catch(e){
+      setErrorMessage('Wrong credentials')
+      setTimeout(() => {
+        setErrorMessage(null)
+      }, 5000)
+    }
+  }
+
   const blogsList = () => (
     <div>
     <p>{user.name} logged-in
       <button onClick={logoutHandler}>logout</button>
     </p>
+    <AddForm handleAdding={handleAdding}
+             title={title}
+             titleHandler={({target}) => setTitle(target.value)}
+             author={author}
+             authorHandler={({target}) => setAuthor(target.value)}
+             url={url}
+             urlHandler={({target}) => setUrl(target.value)}/>
       {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <><Blog key={blog.id} blog={blog} /><button onClick={(e) => removeHandler(blog.id)}>remove</button></>
       )}
     </div>
   )
