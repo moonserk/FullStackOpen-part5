@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import AddForm from './components/AddForm'
+import Notify from './components/Notify'
+
 import blogService from './services/blogs'
 import loginService from './services/login'
+import './style.css'
 
 const App = () => {
 
@@ -12,10 +15,12 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
+  const [typeMessage, setTypeMessage] = useState('green')
 
   const [author, setAuthor] = useState('')
   const [title, setTitle] = useState('')
   const [url, setUrl] = useState('')
+
 
   useEffect(() => {
     async function fetchData(){
@@ -48,10 +53,16 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-    }catch(e){
-      setErrorMessage('Wrong credentials')
+      setErrorMessage(`Welcome back ${user.name}`)
       setTimeout(() => {
         setErrorMessage(null)
+      }, 5000)
+    }catch(e){
+      setErrorMessage('Wrong username or password')
+      setTypeMessage('error')
+      setTimeout(() => {
+        setErrorMessage(null)
+        setTypeMessage('')
       }, 5000)
     }
   }
@@ -84,10 +95,16 @@ const App = () => {
       setAuthor('')
       setUrl('')
       setBlogs(blogs.concat(newBlog))
-    }catch(e){
-      setErrorMessage('Wrong credentials')
+      setErrorMessage(`a new blog ${newBlog.title} by ${newBlog.author} added`)
       setTimeout(() => {
         setErrorMessage(null)
+      }, 5000)
+    }catch(e){
+      setErrorMessage('Somthing goes wrong')
+      setTypeMessage('error')
+      setTimeout(() => {
+        setErrorMessage(null)
+        setTypeMessage('')
       }, 5000)
     }
 
@@ -100,8 +117,10 @@ const App = () => {
       setBlogs(blogs.filter(blog => blog.id !== id))
     }catch(e){
       setErrorMessage('Wrong credentials')
+      setTypeMessage('error')
       setTimeout(() => {
         setErrorMessage(null)
+        setTypeMessage('')
       }, 5000)
     }
   }
@@ -127,7 +146,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-
+      { errorMessage !== null ? <Notify message={errorMessage} type={typeMessage} /> : null}
       {user === null ? loginFrom() : blogsList() }
 
     </div>
