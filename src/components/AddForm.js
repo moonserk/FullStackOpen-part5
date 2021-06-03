@@ -1,8 +1,9 @@
 import React from 'react'
+import Toggable from './Toggable'
 
 const AddForm = ({handleAdding, title, titleHandler, author, authorHandler, url, urlHandler}) => {
     return (
-        <div>
+        <Toggable>
           <form onSubmit={handleAdding}>
             <table>
               <tbody>
@@ -13,7 +14,7 @@ const AddForm = ({handleAdding, title, titleHandler, author, authorHandler, url,
             </table>
             <button type="submit">create</button>
           </form>
-        </div>
+        </Toggable>
     )
 }
 
