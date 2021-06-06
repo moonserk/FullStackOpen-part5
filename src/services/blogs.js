@@ -16,7 +16,7 @@ const configToken = token => (
 
 const getAll = async () => {
   const request = await axios.get(baseUrl)
-  return request.data
+  return request.data.sort((a, b) => b.likes - a.likes)
 }
 
 const create = async (newBlog) => {
