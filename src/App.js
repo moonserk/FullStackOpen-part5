@@ -101,6 +101,28 @@ const App = () => {
 
   }
 
+  const addLikes = async (blogObject) => {
+    try{
+      const returnedObject = await blogService.addLikes(blogObject.id, blogObject)
+      // console.log(blogObject)
+      const newBlogs = blogs.map(blog => blog.id !== blogObject.id ? blog : {...blog, likes: blog.likes + 1})
+      // console.log(newBlogs)
+      setBlogs(newBlogs)
+      // console.log(blogs)
+      // setErrorMessage(`${returnedObject.title} by ${returnedObject.author} likes added`)
+      // setTimeout(() => {
+      //   setErrorMessage(null)
+      // }, 5000)
+    }catch(e){
+      setErrorMessage('Somthing goes wrong')
+      setTypeMessage('error')
+      setTimeout(() => {
+        setErrorMessage(null)
+        setTypeMessage('')
+      }, 5000)
+    }
+  }
+
   const removeHandler = async (id) => {
     try{
       const deletedBlog = await blogService.remove(id)
@@ -125,7 +147,7 @@ const App = () => {
         <AddForm createBlog={addBlog} />
       </Toggable>
       {blogs.map(blog =>
-        <><Blog key={blog.id} blog={blog} /><button onClick={(e) => removeHandler(blog.id)}>remove</button></>
+        <><Blog key={blog.id} blog={blog} addLikes={addLikes}/><button onClick={(e) => removeHandler(blog.id)}>remove</button></>
       )}
     </div>
   )
