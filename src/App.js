@@ -34,6 +34,7 @@ const App = () => {
       setUser(user)
       blogService.setToken(user.token)
     }
+    console.log(loggedUserJSON)
   }, [])
 
   const handleLogin = async (event) => {
@@ -124,17 +125,21 @@ const App = () => {
   }
 
   const removeHandler = async (id) => {
-    try{
-      const deletedBlog = await blogService.remove(id)
-      console.log(deletedBlog)
-      setBlogs(blogs.filter(blog => blog.id !== id))
-    }catch(e){
-      setErrorMessage('Wrong credentials')
-      setTypeMessage('error')
-      setTimeout(() => {
-        setErrorMessage(null)
-        setTypeMessage('')
-      }, 5000)
+    const removedBlog = blogs.filter(blog => blog.id === id)[0]
+    console.log(removedBlog)
+    if(window.confirm(`Remove blog ${removedBlog.title} by ${removedBlog.author}`)){
+      try{
+        const deletedBlog = await blogService.remove(id)
+        console.log(deletedBlog)
+        setBlogs(blogs.filter(blog => blog.id !== id))
+      }catch(e){
+        setErrorMessage('Wrong credentials')
+        setTypeMessage('error')
+        setTimeout(() => {
+          setErrorMessage(null)
+          setTypeMessage('')
+        }, 5000)
+      }
     }
   }
 
@@ -147,7 +152,7 @@ const App = () => {
         <AddForm createBlog={addBlog} />
       </Toggable>
       {blogs.map(blog =>
-        <><Blog key={blog.id} blog={blog} addLikes={addLikes}/><button onClick={(e) => removeHandler(blog.id)}>remove</button></>
+        <Blog key={blog.id} blog={blog} user={user} addLikes={addLikes} removeHandler={removeHandler}/>
       )}
     </div>
   )
