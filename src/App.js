@@ -68,11 +68,11 @@ const App = () => {
   const loginFrom = () => (
     <div>
       <h2>Log in to application</h2>
-       <LoginForm handleLogin={handleLogin}
-                 username={username}
-                 usernameHandler={({target}) => setUsername(target.value)}
-                 password={password}
-                 passwordHandler={({target}) => setPassword(target.value)}/>
+      <LoginForm handleLogin={handleLogin}
+        username={username}
+        usernameHandler={({ target }) => setUsername(target.value)}
+        password={password}
+        passwordHandler={({ target }) => setPassword(target.value)}/>
     </div>
   )
 
@@ -106,7 +106,7 @@ const App = () => {
     try{
       const returnedObject = await blogService.addLikes(blogObject.id, blogObject)
       // console.log(blogObject)
-      const newBlogs = blogs.map(blog => blog.id !== blogObject.id ? blog : {...blog, likes: blog.likes + 1})
+      const newBlogs = blogs.map(blog => blog.id !== blogObject.id ? blog : { ...blog, likes: blog.likes + 1 })
       // console.log(newBlogs)
       setBlogs(newBlogs)
       // console.log(blogs)
@@ -145,9 +145,9 @@ const App = () => {
 
   const blogsList = () => (
     <div>
-    <p>{user.name} logged-in
-      <button onClick={logoutHandler}>logout</button>
-    </p>
+      <p>{user.name} logged-in
+        <button onClick={logoutHandler}>logout</button>
+      </p>
       <Toggable buttonLabel="create new blog" ref={addFormRef}>
         <AddForm createBlog={addBlog} />
       </Toggable>

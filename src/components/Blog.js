@@ -1,6 +1,6 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 
-const Blog = ({blog, user, addLikes, removeHandler}) => {
+const Blog = ({ blog, user, addLikes, removeHandler }) => {
 
   const [isVisible, setVisible] = useState(false)
 
@@ -12,9 +12,7 @@ const Blog = ({blog, user, addLikes, removeHandler}) => {
     marginBottom: 5
   }
 
-  const handleLikes = e => {
-    addLikes(blog)
-  }
+  const handleLikes = () => { addLikes(blog) }
 
   return (
     <div style={blogStyle}>
@@ -23,13 +21,13 @@ const Blog = ({blog, user, addLikes, removeHandler}) => {
         <button onClick={() => setVisible(!isVisible)}>{isVisible ? 'hide' : 'show'}</button>
       </div>
 
-      <div style={{display: isVisible ? '' : 'none'}}>
+      <div style={{ display: isVisible ? '' : 'none' }}>
         <a href={blog.url}>{blog.url}</a>
         <p>{blog.likes}<button onClick={handleLikes}>like</button></p>
         <p>{blog.user.name}</p>
-    <p>{user.username}{blog.user.username}</p>
+        <p>{user.username}{blog.user.username}</p>
         {user.id !== (blog.user.id || blog.user) ? '' :
-         <button style={{backgroundColor: 'blue'}} onClick={(e) => removeHandler(blog.id)}>remove</button>
+          <button style={{ backgroundColor: 'blue' }} onClick={() => removeHandler(blog.id)}>remove</button>
         }
       </div>
     </div>
