@@ -15,7 +15,7 @@ const Blog = ({ blog, user, addLikes, removeHandler }) => {
   const handleLikes = () => { addLikes(blog) }
 
   return (
-    <div style={blogStyle}>
+    <div className='blog' style={blogStyle}>
       <div>
         {blog.title} {blog.author}
         <button onClick={() => setVisible(!isVisible)}>{isVisible ? 'hide' : 'show'}</button>

@@ -104,7 +104,7 @@ const App = () => {
 
   const addLikes = async (blogObject) => {
     try{
-      const returnedObject = await blogService.addLikes(blogObject.id, blogObject)
+      await blogService.addLikes(blogObject.id, blogObject)
       // console.log(blogObject)
       const newBlogs = blogs.map(blog => blog.id !== blogObject.id ? blog : { ...blog, likes: blog.likes + 1 })
       // console.log(newBlogs)
