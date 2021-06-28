@@ -21,7 +21,7 @@ const Blog = ({ blog, user, addLikes, removeHandler }) => {
         <button onClick={() => setVisible(!isVisible)}>{isVisible ? 'hide' : 'show'}</button>
       </div>
 
-      <div style={{ display: isVisible ? '' : 'none' }}>
+      <div className='toggableBlog' style={{ display: isVisible ? '' : 'none' }}>
         <a href={blog.url}>{blog.url}</a>
         <p>{blog.likes}<button onClick={handleLikes}>like</button></p>
         <p>{blog.user.name}</p>
