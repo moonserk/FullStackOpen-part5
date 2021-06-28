@@ -12,8 +12,6 @@ const Blog = ({ blog, user, addLikes, removeHandler }) => {
     marginBottom: 5
   }
 
-  const handleLikes = () => { addLikes(blog) }
-
   return (
     <div className='blog' style={blogStyle}>
       <div>
@@ -23,7 +21,7 @@ const Blog = ({ blog, user, addLikes, removeHandler }) => {
 
       <div className='toggableBlog' style={{ display: isVisible ? '' : 'none' }}>
         <a href={blog.url}>{blog.url}</a>
-        <p>{blog.likes}<button onClick={handleLikes}>like</button></p>
+        <p>{blog.likes}<button onClick={() => addLikes(blog)}>like</button></p>
         <p>{blog.user.name}</p>
         <p>{user.username}{blog.user.username}</p>
         {user.id !== (blog.user.id || blog.user) ? '' :

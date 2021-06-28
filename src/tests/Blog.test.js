@@ -9,7 +9,7 @@ describe('Renders blog content', () => {
   const blog = {
     blog: { title: 'Some title', author: 'Some author', url: 'http://', likes: 1, user: { name: 'gg' } },
     user: { username: 'gg' },
-    addLike: jest.fn(),
+    addLikes: jest.fn(),
     removeHandler: jest.fn()
   }
 
@@ -40,24 +40,25 @@ describe('Renders blog content', () => {
     fireEvent.click(button)
     expect(toggableContent).toHaveStyle('display: block')
   })
+
 })
 
 
 test('clicking the button calls event handler once', () => {
+
   const blog = {
-    blog: { title: 'Some title', author: 'Some author', url: 'http://', likes: 1, user: { name: 'gg' } },
-    user: { username: 'gg' },
-    addLike: jest.fn(),
+    blog: { title: 'Some title', author: 'Some author', url: 'http://', likes: 1, user: { id: '1', name: 'gg' } },
+    user: { id: '1', username: 'gg' },
+    addLikes: jest.fn(),
     removeHandler: jest.fn()
   }
 
-  // const mockHandler = jest.fn()
   const component = render(
     <Blog {...blog} />
   )
-  const button = component.getByText('show')
-  fireEvent.click(button)
 
-  expect(component.container).toHaveTextContent('http://')
-  expect(component.container).toHaveTextContent(1)
+  const button = component.getByText('like')
+  fireEvent.click(button)
+  fireEvent.click(button)
+  expect(blog.addLikes.mock.calls).toHaveLength(2)
 })
